@@ -1,5 +1,6 @@
 import Signin from './components/signin';
-import Signup from "./components/signup"
+import Signup from "./components/signup";
+import Home from "./components/home"
 import './App.css';
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
     <div className="App">
     <Signin/>
     <Signup/>
+    <Home/>
     </div>
   );
 }
