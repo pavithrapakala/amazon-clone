@@ -1,4 +1,4 @@
-
+import Signin from './components/signin';
 import './App.css';
 
 function App() {
@@ -6,6 +6,7 @@ function App() {
     <div className="App">
     <h1>Welcome to Amazon</h1>
     <h2>hurry!</h2>
+    <Signin/>
     </div>
   );
 }
