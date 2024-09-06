@@ -2,7 +2,7 @@ import {Component} from "react"
 import classes from "./index.module.css"
 
 class Signup extends  Component{
-    state={password:"",rePassword:"",message:""}
+    state={email:"",password:"",rePassword:"",message:""}
 
     onChangePassword=event=>{
         this.setState((prevState)=>{
@@ -16,15 +16,35 @@ class Signup extends  Component{
         })
     }
 
-    onSubmitButton=event=>{
+    onSubmitButton=async (event)=>{
         console.log("clicked")
         event.preventDefault();
-        const {password,rePassword}=this.state
-        if(password===rePassword){
-            this.setState((prevState)=>{
-                return {...prevState,message:"SignUp successfull"}
-
+        const {email,password,rePassword}=this.state
+        const url="http://localhost:4000/signup";
+        const options={
+            method:"POST",
+            Headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                "email":email,
+                "password":password
             })
+        }
+
+        if(password===rePassword){
+            const response=await fetch(url,options)
+            console.log("before if",response)
+            if(response){
+                console.log(response)
+                const data=response.json();
+                console.log(data)
+                this.setState((prevState)=>{
+                    return {...prevState,message:"success"}
+                })
+            }else{
+                console.warn("something wrong with api")
+            }
         }else{
             this.setState((prevState)=>{
                 return {...prevState,message:"Password Doesn't match"}
@@ -34,20 +54,22 @@ class Signup extends  Component{
             return {...prevState,password:"",rePassword:""}
         })
     }
-    handleEmail=()=>{
-
+    handleEmail=(event)=>{
+        this.setState(prevState=>{
+            return {...prevState,email:event.target.value}
+        })
     }
 
 
     render(){
-        const{password,rePassword,message}=this.state;
+        const{email,password,rePassword,message}=this.state;
         return(
             <>
             <div className={classes.formContainer}>
                 <p>SignUp</p>
                 <form className={classes.inputFieldsContainer}  onSubmit={this.onSubmitButton}>
                     <label htmlFor="email">Email</label>
-                    <input type="mail" placeholder="enter your email" id="email" onChange={this.handleEmail} required/>
+                    <input type="mail" placeholder="enter your email" id="email" value={email} onChange={this.handleEmail} required/>
                     <label htmlFor="password">Password</label>
                     <input value={password} id="password" type="password" placeholder="enter password" onChange={this.onChangePassword} maxLength={16} minLength={6} required/>
                     <label htmlFor="rePassword">Re-Enter Password</label>
